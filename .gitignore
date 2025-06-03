@@ -77,6 +77,13 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.draft.ipynb
+
+#for PAT github
+.git-pat-token
+
+# Files only for local testing
+*_local.py
 
 # IPython
 profile_default/
