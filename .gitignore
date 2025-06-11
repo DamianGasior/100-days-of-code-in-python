@@ -79,6 +79,9 @@ target/
 .ipynb_checkpoints
 *.draft.ipynb
 
+# MD draft files
+*.draft.md
+
 #for PAT github
 .git-pat-token
 
