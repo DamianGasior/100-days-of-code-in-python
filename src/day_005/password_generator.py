@@ -64,17 +64,16 @@ print(f'Your password has {len(new_ordered_password)} characters\n')
 """More complex or disordered order in the 'new_disordered_password' but using the same parameters like for 'new_ordered_password'"""
 
 combined_list_of_three=r_letters+r_symbols+r_numbers
-new_disordered_list=combined_list_of_three[:] #creating a copy of list 'combined_list_of_three='
 
 
 
-random.shuffle(new_disordered_list) #
+random.shuffle(combined_list_of_three) # the same list , its just shuffled , / order of the characters in the list is changed to be random
 
 
 
 new_disordered_password=""
 
-for x in  new_disordered_list:
+for x in  combined_list_of_three:
     new_disordered_password+=x
 
 print(f'Your new disordered password is : {new_disordered_password}')
