@@ -1,5 +1,7 @@
 import random
 
+from hangman_ascii_art import hangman
+
 word_list=['aardvark', 'ubuebuue']
 
 # 1. Randomly, choose a word froom the word_list and assign it to  a variable, chosen_word . Then print it
@@ -19,9 +21,14 @@ for i in range(len(chosen_word)):
 
 
 
-#run the wile loop till there will be still some unguessed ('_') in my_list
 
-while '_' in my_list:
+
+succesfull_attempts=0
+failed_attempts=0
+
+#run the wile loop till there will be still some unguessed ('_') in my_list, break it when 6 attempts reached 
+
+while '_' in my_list and failed_attempts < 6:
     guess=input('\nChoose a letter: ').lower()
 
 #using function enumarate, where I can iterate throug my randomly chosen_word and I can have access to the 'index' and 'value' of the chosen_word
@@ -42,8 +49,24 @@ while '_' in my_list:
     for i in my_list:
         my_word+=i
 
+    if guess in my_word:
+        succesfull_attempts+=1
+    else:
+        failed_attempts+=1
+
+    if  failed_attempts <6:
+        print(hangman[failed_attempts])
+    elif failed_attempts == 6:
+        print(hangman[failed_attempts])
+        print('You lost')
+
+
+
+
 
     print(my_word,'\n')
 
+if '_' not in my_word:
+    print('You won')
 
 
