@@ -1,6 +1,6 @@
 import random
 
-word_list=['camel','fiat','nike', 'malibu']
+word_list=['aba','ifi','ekie', 'ubu']
 
 # 1. Randomly, choose a word froom the word_list and assign it to  a variable, chosen_word . Then print it
 # 2.Ask the user to guess a letter and assign their answer to a variable called guess. Make a guess lowercase
@@ -11,13 +11,39 @@ word_list=['camel','fiat','nike', 'malibu']
 
 chosen_word=random.choice(word_list)
 print(chosen_word)
+my_list=[]
 
-guess=input('Choose a letter: ').lower()
+for i in range(len(chosen_word)):
+    print('_', end=" ")     # end="  - this allows you to print any character next to each other , instead of one below another one. 
+    my_list.append('_')     # creating a list with  the number of underscores equal to the  length of the chosen_word
 
-print(guess)
 
-for i in chosen_word:
-    if guess==i:
-        print('Right')
-    else:
-        print('Wrong')
+
+
+
+while '_' in my_list:
+    guess=input('\nChoose a letter: ').lower()
+
+#using function enumarate, where I can iterate throug my randomly chosen_word and I can have access to the index and value of the chosen_word
+
+    for index, symbol in enumerate(chosen_word):
+        
+        if guess==symbol :
+            my_list[index]=symbol
+        elif guess!=symbol :
+            if my_list[index]=='_':
+                my_list[index]='_'
+            else:
+                continue
+    #creating an empty string
+    my_word=''
+
+    #adding all the elements from my_list to the my_word, so that we can print it out in a nice format to the user
+    for i in my_list:
+        my_word+=i
+
+
+    print(my_word,'\n')
+
+
+
