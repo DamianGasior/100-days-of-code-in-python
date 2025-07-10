@@ -58,8 +58,9 @@ while '_' in my_list and failed_attempts < 6:
         print(hangman[failed_attempts])
         print(my_word,'\n')
     elif failed_attempts == 6:
+        print('You lose')
         print(hangman[failed_attempts])
-        print('You lost')
+        
 
 
 
@@ -68,6 +69,6 @@ while '_' in my_list and failed_attempts < 6:
     
 
 if '_' not in my_word:
-    print('You won')
+    print('You won!\n')
 
 
