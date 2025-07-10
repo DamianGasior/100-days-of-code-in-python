@@ -1,6 +1,6 @@
 import random
 
-word_list=['aba','ifi','ekie', 'ubu']
+word_list=['aardvark', 'ubuebuue']
 
 # 1. Randomly, choose a word froom the word_list and assign it to  a variable, chosen_word . Then print it
 # 2.Ask the user to guess a letter and assign their answer to a variable called guess. Make a guess lowercase
@@ -19,12 +19,12 @@ for i in range(len(chosen_word)):
 
 
 
-
+#run the wile loop till there will be still some unguessed ('_') in my_list
 
 while '_' in my_list:
     guess=input('\nChoose a letter: ').lower()
 
-#using function enumarate, where I can iterate throug my randomly chosen_word and I can have access to the index and value of the chosen_word
+#using function enumarate, where I can iterate throug my randomly chosen_word and I can have access to the 'index' and 'value' of the chosen_word
 
     for index, symbol in enumerate(chosen_word):
         
@@ -35,7 +35,7 @@ while '_' in my_list:
                 my_list[index]='_'
             else:
                 continue
-    #creating an empty string
+    #creating an empty string, where I will display letters and '_' each time after users guess
     my_word=''
 
     #adding all the elements from my_list to the my_word, so that we can print it out in a nice format to the user
