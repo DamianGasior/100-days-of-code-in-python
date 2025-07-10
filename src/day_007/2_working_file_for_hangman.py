@@ -21,7 +21,7 @@ for i in range(len(chosen_word)):
 
 
 
-
+#attempts below will be later used to count the succesfull or failed number of attempts in guessing the letters
 
 succesfull_attempts=0
 failed_attempts=0
@@ -56,6 +56,7 @@ while '_' in my_list and failed_attempts < 6:
 
     if  failed_attempts <6:
         print(hangman[failed_attempts])
+        print(my_word,'\n')
     elif failed_attempts == 6:
         print(hangman[failed_attempts])
         print('You lost')
@@ -64,7 +65,7 @@ while '_' in my_list and failed_attempts < 6:
 
 
 
-    print(my_word,'\n')
+    
 
 if '_' not in my_word:
     print('You won')
