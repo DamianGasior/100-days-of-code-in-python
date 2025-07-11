@@ -72,6 +72,7 @@ while '_' in my_list and failed_attempts < 6:
             print(f'\n************************************************** {remaining_lives} out of 6 LIVES LEFT *************************************************************\n')
         elif failed_attempts == 6:
             print(hangman[failed_attempts])
+            print(f'\nThe word which you needed to guess was: {chosen_word}')
             print(f'\n************************************************** {remaining_lives} out of 6 LIVES LEFT *************************************************************\n')
             print('\n*************************************************** YOU LOSE ******************************************************')
         
