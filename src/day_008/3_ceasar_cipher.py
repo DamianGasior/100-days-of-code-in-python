@@ -1,35 +1,25 @@
-import string
+
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 
-print(len(alphabet)) #26
-alphabets_len=len(alphabet)
-adj_alphabets_len=len(alphabet)-1
+
+alphabets_length=len(alphabet)#26
+
 
 
 def encoding_function(statement,shift_number):
     encoded_statement=''
 
     
-    for i in statement:
-        if i in alphabet:
-            pos_in_alphabet=alphabet.index(i)
-            print(f'index of letter: "{i}" is {pos_in_alphabet}')
-            max_range=pos_in_alphabet+shift_number
-            if max_range<=adj_alphabets_len and shift_number>=0: 
-                encoded_letter=alphabet[pos_in_alphabet+shift_number]
-                encoded_statement+=encoded_letter
-
-
-            elif max_range>adj_alphabets_len and shift_number>0: 
-                new_index=(pos_in_alphabet+shift_number)%alphabets_len
-                encoded_letter=alphabet[new_index]
+    for letter in statement:
+            if letter in alphabet:        
+                pos_in_alphabet=alphabet.index(letter)
+                print(f'index of letter: "{letter}" is {pos_in_alphabet}')
+                encoded_letter=alphabet[(pos_in_alphabet+shift_number)%alphabets_length]
                 encoded_statement+=encoded_letter
             else:
-                encoded_statement+=i  
-        else:
-            encoded_statement+=i
-
+                encoded_statement+=letter 
+  
     return encoded_statement
 
 
@@ -37,33 +27,41 @@ def encoding_function(statement,shift_number):
 
 def decoding_function(statement,shift_number):
     decoded_statement=''
-    for i in statement:
-            if i in alphabet:
-                pos_in_alphabet=alphabet.index(i)
-                print(f'index of letter: "{i}" is {pos_in_alphabet}')
-                min_lenght=pos_in_alphabet+shift_number 
-                if min_lenght >= 0 and shift_number>=0:
-                    new_index=pos_in_alphabet-shift_number 
-                    decoded_letter=alphabet[new_index]
-                    decoded_statement+=decoded_letter
-                             
-                elif min_lenght < 0 and shift_number>0:
-                    new_index=alphabets_len-abs(pos_in_alphabet-shift_number)
-                    decoded_letter=alphabet[new_index]
-                    decoded_statement+=decoded_letter
+    for letter in statement:
+            if letter in alphabet:
+                pos_in_alphabet=alphabet.index(letter)
+                print(f'index of letter: "{letter}" is {pos_in_alphabet}')
+                decoded_letter=alphabet[(pos_in_alphabet-shift_number)%alphabets_length]
+                decoded_statement+=decoded_letter
 
-                else:                               
-                    decoded_statement+=i
             else:                               
-                    decoded_statement+=i 
+                decoded_statement+=letter
 
     return decoded_statement
             
 
 def decision():
-    action=input("Type 'encode' to encrypt, type 'decode' to decrypt:").lower()
+
+    while True:
+        action=input("Type 'encode' to encrypt, type 'decode' to decrypt: ").lower()
+        if action=='encode' or action=='decode':
+            break
+        else:
+             print('Invalid input, only "encode" or "decode" allowed')
+
     statement=input('Type your message: ').lower()
-    shift_number=int(input('Type the shift number: '))
+
+    while True:
+        users_input=input('Type the shift number equal or greater than 0 : ')
+      
+        try:
+            shift_number = int(users_input)
+            if shift_number>=0:
+                break
+            else:
+                print("Number needs to be greater than 0")
+        except ValueError:
+            print('Insert a valid number')
 
     if action=='encode':
         print(f'Here is the encoded result: {encoding_function(statement,shift_number)}') 
@@ -73,11 +71,10 @@ def decision():
 
 decision()
 
-repeat_statement=input("Type 'yes' if you want to go again. Otherwise type 'no': ").lower()   
     
-    
+ # this 'repeat_statement' needs to be after decision() function , inside the loop so that it asked each time when 'yes'   
 while True:
-   
+    repeat_statement=input("Type 'yes' if you want to go again. Otherwise type 'no': ").lower()  
     if repeat_statement=='yes':
         decision()
     else:
