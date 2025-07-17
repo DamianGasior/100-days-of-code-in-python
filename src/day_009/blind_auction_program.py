@@ -1,6 +1,6 @@
 print("Welcome to the secret action program\n")
 
-other_bidders=''
+
 all_bid_prices={}
 
 
@@ -20,7 +20,7 @@ def blind_auction_game():
         except ValueError:
             print('Insert a valid number')
     
-    all_bid_prices[users_name]=users_bid_price
+    all_bid_prices[users_name]=float(users_bid_price)  # float necessary to compare numbers, not strings..
     return all_bid_prices
 
 blind_auction_game()
@@ -31,17 +31,9 @@ while True:
         print('\n' * 100)
         blind_auction_game()
     elif other_bidders=='no':
-        #check with the below the data type in the dictionary, you will see its str in value, example : 
-        #type for dam1 -> type : <class 'str'>, for value : 100 -> type :<class 'str'>
-        #type for dam2 -> type : <class 'str'>, for value : 20 -> type :<class 'str'>
-        #type for dam3 -> type : <class 'str'>, for value : 5 -> type :<class 'str'>
-
-        """ for key,value in all_bid_prices.items():
-            print(f'type for {key} -> type : {type(key)}, for value : {value} -> type :{type(value)} ') """
-
         print('\nGAME OVER\n')
         
-        winner_value=max(all_bid_prices.items(), key=lambda item: float(item[1])) # float necessary to compare numbers, not strings..
+        winner_value=max(all_bid_prices.items(), key=lambda item: item[1]) 
        
         print(f'The winner is: {winner_value[0]} with a bid of $: {winner_value[1]} \n')
         break
