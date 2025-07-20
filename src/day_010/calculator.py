@@ -35,27 +35,27 @@ def operator_function():
     -
     *
     /''')
-        operation_type=input('Pick an operation:')
-        if operation_type =='+':
-            operation_type=add
+        operation_input=input('Pick an operation:').strip()
+        if operation_input =='+':
+            operation_type_function_function=add
             operation_symbol='+'
-            return operation_type,operation_symbol 
-        elif operation_type=='*':
-            operation_type=multiply
+            return operation_type_function_function,operation_symbol 
+        elif operation_input=='*':
+            operation_type_function=multiply
             operation_symbol='*'
-            return operation_type,operation_symbol 
-        elif operation_type=='/':
-            operation_type=divide
+            return operation_type_function,operation_symbol 
+        elif operation_input=='/':
+            operation_type_function=divide
             operation_symbol='/'
-            return operation_type,operation_symbol 
-        elif operation_type=='-':
-            operation_type=subtract
+            return operation_type_function,operation_symbol 
+        elif operation_input=='-':
+            operation_type_function=subtract
             operation_symbol='-'
-            return operation_type,operation_symbol 
+            return operation_type_function,operation_symbol 
         else:
             print('Insert a valid symbol')
 
-operation_type,operation_symbol=operator_function()
+operation_type_function,operation_symbol=operator_function()
 print(operation_symbol)
 
 
@@ -73,7 +73,7 @@ s_number=second_number_function()
 
 
 def final_operation():
-    result=operation_type(f_number,s_number)
+    result=operation_type_function(f_number,s_number)
     print(f'{f_number} {operation_symbol} {s_number} = {result}')
     return result
 
@@ -83,13 +83,13 @@ while True:
     next_steps=input(f"Type 'y' to continue calculating with {result}, or type 'n' to start a new calculation, type 'q' to exit the program: ").lower()
     if next_steps=='y':
         f_number=result
-        operation_type,operation_symbol=operator_function()
-        s_number=first_number_function()
+        operation_type_function,operation_symbol=operator_function()
+        s_number=second_number_function()
         result=final_operation()
     elif next_steps=='n':
         f_number=first_number_function()
-        operation_type,operation_symbol=operator_function()
-        s_number=first_number_function()
+        operation_type_function,operation_symbol=operator_function()
+        s_number=second_number_function()
         result=final_operation()
     elif next_steps=='q':
         print('Thank you for using this simple calculator')
