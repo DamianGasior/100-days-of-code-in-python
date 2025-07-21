@@ -56,7 +56,7 @@ def operator_function():
             print('Insert a valid symbol')
 
 operation_type_function,operation_symbol=operator_function()
-print(operation_symbol)
+#print(operation_symbol)
 
 
 def second_number_function():
@@ -78,6 +78,7 @@ def final_operation():
     return result
 
 result=final_operation()
+
 
 while True:
     next_steps=input(f"Type 'y' to continue calculating with {result}, or type 'n' to start a new calculation, type 'q' to exit the program: ").lower()
