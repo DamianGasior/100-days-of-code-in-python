@@ -48,7 +48,7 @@ def first_two_players_card(welcome_statement):
             players_deck_of_cards.append(choose_random_card)
         for card_score in players_deck_of_cards:
             players_total_score+=card_score
-    logging.debug(' Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))      
+    logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))      
     print(f'Your cards : {players_deck_of_cards}, current score {players_total_score}\n')
     return players_total_score,players_deck_of_cards
 
@@ -154,7 +154,8 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
 
 def main():
 
-    welcome_statement=welcome_validaton_function(input("Do you want to play a game of Blackjack ? Type 'y' or 'n' :"))
+    welcome_statement=welcome_validaton_function(input("Do you want to play a game of Blackjack ? Type 'y' or 'n' : "))
+    print('\n')
     if welcome_statement=='n':
         print('End of Game')
         sys.exit()
