@@ -98,18 +98,20 @@ def round_comparison(dealers_total_score,players_total_score,players_deck_of_car
        return 'We have a DRAW'
   
 
-def ace_treatment(total_score,ace_card):
+def ace_treatment(total_score,special_card):
     """ace conversion function, to be more in line with general black jack rules """ 
-    if ace_card==11 and total_score > 21:
+    if special_card==11 and total_score > 21:
         logging.debug('Ace conversion from 11 to 1')
-        total_new_score=total_score-ace_card+1
-        return total_new_score
-    elif ace_card==11 and total_score <= 21:
+        total_new_score=total_score-special_card+1
+        special_card=1
+        return total_new_score,special_card
+    elif special_card==11 and total_score <= 21:
         logging.debug('Ace conversion from 1 to 11')
-        total_new_score=total_score-ace_card+11
-        return total_new_score
+        total_new_score=total_score-special_card+11
+        special_card=11
+        return total_new_score,special_card
     else:
-        return total_score
+        return total_score,special_card
 
 def next_card_round(players_deck_of_cards,players_total_score,dealers_total_score,dealers_deck_of_cards):
      
@@ -117,9 +119,9 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
         continue_game_question=question_validaton_function("Type 'y' to get another card, type 'n' to pass: ")       
         if continue_game_question=='y' and players_total_score <21 and dealers_total_score <21:
             choose_random_card=card_lottery()
-            players_deck_of_cards.append(choose_random_card)
             players_total_score+=choose_random_card
-            players_total_score=ace_treatment(players_total_score,choose_random_card)
+            players_total_score,choose_random_card=ace_treatment(players_total_score,choose_random_card)
+            players_deck_of_cards.append(choose_random_card)
             print(f'Your cards : {players_deck_of_cards}, current score {players_total_score}')
             print(f'Computers first card: {dealers_deck_of_cards[0]}') 
             logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)
@@ -141,9 +143,9 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
             
         while continue_game_question=='n' and dealers_total_score <17 :
                 choose_random_card=card_lottery()
-                dealers_deck_of_cards.append(choose_random_card)
                 dealers_total_score+=choose_random_card
-                dealers_total_score=ace_treatment(dealers_total_score,choose_random_card)
+                dealers_total_score,choose_random_card=ace_treatment(dealers_total_score,choose_random_card)
+                dealers_deck_of_cards.append(choose_random_card)
                 print(f'Computers first card: {dealers_deck_of_cards[0]}') 
                 logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)  
                 logging.debug(' Computers current score %d\n',dealers_total_score)
