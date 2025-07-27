@@ -2,7 +2,7 @@
 import random
 import sys
 import logging
-logging.basicConfig(level=logging.DEBUG) #to see following lines with logging.debug change to: logging.basicConfig(level=logging.DEBUG), to remove logs set to: logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.WARNING) #to see following lines with logging.debug change to: logging.basicConfig(level=logging.DEBUG), to remove logs set to: logging.basicConfig(level=logging.WARNING)
 
 deck_of_cards=[11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10 ]
 
@@ -47,9 +47,9 @@ def first_two_players_card(welcome_statement):
             choose_random_card =card_lottery()
             players_deck_of_cards.append(choose_random_card)
         for card_score in players_deck_of_cards:
-            players_total_score+=card_score
-    logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))      
+            players_total_score+=card_score 
     print(f'Your cards : {players_deck_of_cards}, current score {players_total_score}\n')
+    logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards)) 
     return players_total_score,players_deck_of_cards
 
 
@@ -62,10 +62,10 @@ def first_two_dealers_card(welcome_statement):
             choose_random_card =card_lottery()
             dealers_deck_of_cards.append(choose_random_card)         
         for card_score in dealers_deck_of_cards:
-            dealers_total_score+=card_score
-        logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)  
-        print(f'Computers first card: {dealers_deck_of_cards[0]}') 
+            dealers_total_score+=card_score      
+        logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards) 
         logging.debug(' Computers current score %d\n',dealers_total_score)
+        print(f'Computers first card: {dealers_deck_of_cards[0]}')
 
         return  dealers_total_score, dealers_deck_of_cards
   
@@ -124,6 +124,7 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
             print(f'Computers first card: {dealers_deck_of_cards[0]}') 
             logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)
             logging.debug(' Computers current score %d\n',dealers_total_score)
+            logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))
             if players_total_score > 21:
                 result_comparison=round_comparison(dealers_total_score,players_total_score,players_deck_of_cards,dealers_deck_of_cards)
                 print(result_comparison)            
@@ -133,6 +134,7 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
             print(f'Computers first card: {dealers_deck_of_cards[0]}') 
             logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)  
             logging.debug(' Computers current score %d\n',dealers_total_score)
+            logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))
             result_comparison=round_comparison(dealers_total_score,players_total_score,players_deck_of_cards,dealers_deck_of_cards)
             print(result_comparison)
             return
@@ -144,7 +146,8 @@ def next_card_round(players_deck_of_cards,players_total_score,dealers_total_scor
                 dealers_total_score=ace_treatment(dealers_total_score,choose_random_card)
                 print(f'Computers first card: {dealers_deck_of_cards[0]}') 
                 logging.debug('Computers current deck of cards: %s',dealers_deck_of_cards)  
-                logging.debug(' Computers current score %d\n',dealers_total_score)                
+                logging.debug(' Computers current score %d\n',dealers_total_score)
+                logging.debug('Obecna talia kart to %s,\n liczba kart to %d',deck_of_cards,len(deck_of_cards))                
                 if dealers_total_score >= 17:
                     #print(f'Computers first card: {dealers_deck_of_cards[0]},\ncurrent score {dealers_total_score} - this is for Dev purpose only!!\n')
                     result_comparison=round_comparison(dealers_total_score,players_total_score,players_deck_of_cards,dealers_deck_of_cards)
