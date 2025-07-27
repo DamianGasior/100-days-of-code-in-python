@@ -43,7 +43,7 @@ def first_two_players_card(welcome_statement):
     players_total_score=0
     players_deck_of_cards=[]
     if welcome_statement=='y': 
-        for _ in range (2):   # ciekawa iteracja przez petle, nie podajesz 'i' ale dajesz tylko '_'
+        for _ in range (2):   # interesting way to iterate, you do not give  'i' but only  '_'
             choose_random_card =card_lottery()
             players_deck_of_cards.append(choose_random_card)
         for card_score in players_deck_of_cards:
