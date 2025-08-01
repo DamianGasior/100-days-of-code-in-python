@@ -43,7 +43,7 @@ def game_play(level):
     elif level=="easy":
         attempts=10
     for attempt in range(attempts,0,-1):
-        print(f'You have {attempt} attempts remaining to guess the number')
+        print(f'\nYou have {attempt} attempts remaining to guess the number')
         users_guess=guess_validation() 
         if users_guess>number_to_guess:
             comparison_result="Too high.\nGuess again"
