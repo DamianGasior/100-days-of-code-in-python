@@ -1,16 +1,3 @@
-# Welcome statement
-# user random module
-# import data from the higher_lower_data.py, list of ditionaries
-# you will need to apply a radnom from the tems from the list of dicationaries for two variables :
-# Compare A, provide all the data from the dictioary
-# vs Compare B
-# Userr will need to answer the below query, by Typiing A or B
-# Answer form the query will drive a comparison between the  two "follower_count" ( A vs B) , higher score wins.
-# the score which has won, is  moinvg to the first place, and then a second random choice is picked up from the list
-# the list is not amended (  items are not removed from the list, the one which were arleady chosen)
-# Validation of the who has more followers question. Apply lower() strip() and implement a validation that only 'A' or 'B' are required
-# Each time the user will get the guess, and  one point to his score and present it in this way: 'You are right! Current score: XX'
-
 import sys
 import random
 from higher_lower_data import data
@@ -141,7 +128,7 @@ def main():
             follower_count_a, follower_count_b, custom_a, custom_b, current_score,play_again = first_round_only()
             if play_again==None:
                 play_again=next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score,play_again )
-                # play_again=next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score)
+             
             elif play_again == "no":
                 print("\nThank you for playing our higher_lower game!")
                 sys.exit()
