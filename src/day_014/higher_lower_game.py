@@ -21,11 +21,6 @@ logging.basicConfig(
 )  # to see following lines with logging.debug change to: logging.basicConfig(level=logging.DEBUG), to remove logs set to: logging.basicConfig(level=logging.WARNING)
 
 
-# current_score=0
-
-# custom_a=random.choice(data)
-# print(custom_a)
-
 
 def data_decomposition(variable_data):
     return f"{variable_data['name']}, a {variable_data['description']}, from {variable_data['country']}"
@@ -48,29 +43,31 @@ def question_to_user():
 
 
 # refactoring kodu ponizej
-def followers_count_comparison(users_guess, follower_count_a, follower_count_b, current_score):
-    # global current_score
+def followers_count_comparison(users_guess, follower_count_a, follower_count_b, current_score,play_again):
+
     if users_guess == "a":
         if follower_count_a > follower_count_b:
             current_score += 1
-            return current_score
+            return current_score,play_again
         else:
             print(
                 f"Sorry, that's wrong. Final score: {current_score}"
             )  # problem with current score, if the suser wants to play again, we need to reset the current_score to '0'
             play_again = play_again_question_validation()
-            continue_game_decistion(play_again)
+            return current_score,play_again
+           
 
     elif users_guess == "b":
         if follower_count_a < follower_count_b:
             current_score += 1
-            return current_score
+            return current_score,play_again
         else:
             print(
                 f"Sorry, that's wrong. Final score: {current_score}"
             )  # problem with current score, if the suser wants to play again, we need to reset the current_score to '0'
             play_again = play_again_question_validation()
-            continue_game_decistion(play_again)
+            return current_score,play_again
+           
 
 
 def play_again_question_validation():
@@ -87,15 +84,10 @@ def play_again_question_validation():
             print("Type 'yes' or 'no' only")
 
 
-def continue_game_decistion(decision):
-    if decision == "yes":
-        main()
-    else:
-        print("\nThank you for playing our higher_lower game!")
-        sys.exit()
 
 
 def first_round_only():
+    play_again=None
     current_score = 0  # variable initialized, so that each time when the user decides to play again within the same session, the variable is reset to 0 in the first round
     custom_a_b = []
     custom_a_b = random.sample(data, k=2)
@@ -108,14 +100,12 @@ def first_round_only():
     follower_count_b = follower_count(custom_a_b[1])
     logging.debug("follower_count B:  %d", follower_count_b)
     users_guess = question_to_user()
-    current_score = followers_count_comparison(
-        users_guess, follower_count_a, follower_count_b, current_score
-    )
+    current_score,play_again = followers_count_comparison(users_guess, follower_count_a, follower_count_b, current_score,play_again)
     print(f"\nYou are right! Current score: {current_score}\n")
-    return follower_count_a, follower_count_b, custom_a, custom_b, current_score
+    return follower_count_a, follower_count_b, custom_a, custom_b, current_score,play_again
 
 
-def next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score):
+def next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score,play_again):
     while True:
         custom_a = custom_b
         print(f"Compare A: {custom_a}")
@@ -127,19 +117,34 @@ def next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_
         custom_b = data_decomposition(custom_b)
         print(f"\nAgainst B: {custom_b}")
         users_guess = question_to_user()
-        current_score = followers_count_comparison(
-            users_guess, follower_count_a, follower_count_b, current_score
+        current_score,play_again = followers_count_comparison(
+            users_guess, follower_count_a, follower_count_b, current_score,play_again 
         )
         print(f"\nYou are right! Current score: {current_score}\n")
+        if play_again!=None:
+            return play_again
 
 
 def main():
-
+ 
     print("\nWelcome to higher lower game!\n")
 
-    follower_count_a, follower_count_b, custom_a, custom_b, current_score = (first_round_only()
-    )
-    next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score)
+        
+    follower_count_a, follower_count_b, custom_a, custom_b, current_score,play_again = first_round_only()
+   
+    while True:
+        if play_again==None:
+            play_again=next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score,play_again )
+        
+        elif play_again == "yes":
+            print("\nWelcome to higher lower game!\n")
+            follower_count_a, follower_count_b, custom_a, custom_b, current_score,play_again = first_round_only()
+            if play_again==None:
+                play_again=next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score,play_again )
+                # play_again=next_rounds(custom_a, custom_b, follower_count_a, follower_count_b, current_score)
+            elif play_again == "no":
+                print("\nThank you for playing our higher_lower game!")
+                sys.exit()
 
 
 if __name__ == "__main__":
