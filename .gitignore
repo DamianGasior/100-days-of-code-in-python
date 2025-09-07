@@ -87,6 +87,8 @@ target/
 
 # Files only for local testing
 *_local.py
+*_local.ipynb
+*_draft.md
 
 # IPython
 profile_default/
