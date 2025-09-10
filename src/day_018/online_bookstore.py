@@ -212,14 +212,16 @@ for i in bookstore_first.search_for_book("harry"):
 bookstore_first.show_books()
 
 bookstore_first.sell_book("1984")
-# bookstore_first.sell_book("Harry Potter") # an exceptino will be raised,as expected 
+
+bookstore_first.show_books()
+# # bookstore_first.sell_book("Harry Potter") # an exceptino will be raised,as expected 
 
 
-bookstore_first.sell_book(b2)
+# bookstore_first.sell_book(b2)
 
-bookstore_first.return_book(b2)
+# bookstore_first.return_book(b2)
 
-bookstore_first.return_book("1984")
+# bookstore_first.return_book("1984")
 
-for i in bookstore_first.search_for_book("orwell"):
-    print(i)
+# for i in bookstore_first.search_for_book("orwell"):
+#     print(i)
