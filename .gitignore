@@ -89,6 +89,7 @@ target/
 *_local.py
 *_local.ipynb
 *_draft.md
+*_local.csv
 
 # IPython
 profile_default/
