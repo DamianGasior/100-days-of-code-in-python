@@ -5,10 +5,11 @@ import mplcursors #helps to buid interactive charts
 
 
 class Currency_file():
-    def __init__(self,location,encoding,sep,index=True):
+    def __init__(self,location,encoding,sep,decimal=',',index=True):
         self.location=location
         self.encoding=encoding
         self.sep=sep
+        self.decimal=decimal
         self.index=index
         self.ccy_file=pd.read_csv(self.location,encoding=self.encoding,sep=self.sep)
 
@@ -22,6 +23,8 @@ class Currency_file():
     def show_columns (self):
        return self.ccy_file.columns.tolist() #returning class instance of  class Currency_file()
 
+    def show_head (self,param):
+       return self.ccy_file.head(param) #returning class instance of  class Currency_file()
 
 
     def adjust_by_specific_columns(self,*args):
@@ -60,18 +63,26 @@ class Currency_file():
 
     def convert_to_date(self,*args):
         for column_date in args:
-            self.ccy_file[column_date]=pd.to_datetime(self.ccy_file[column_date])#changing the format to date
+            self.ccy_file[column_date]=pd.to_datetime(
+                self.ccy_file[column_date]
+                .astype(str)
+                .str.replace(r"\.0$","",regex=True)#removing '.0' in case there are zeros at the end
+                .str.strip(),
+                format='%Y%m%d',
+                 errors='coerce')#changing the format to date
             self.ccy_file.set_index(column_date)#changing the date to index so then you can search by date and  use later in the graph as date , not as 0,1,2,3
         return self  #returning class instance of  class Currency_file()
     
 
 class File_csv_exporter():
-    def __init__(self,file,location,encoding='utf-8',sep=',',index=False):
+    def __init__(self,file,location,decimal=',',encoding='utf-8',sep=',',index=False,header=0):
         self.file=file
         self.location=location
         self.encoding=encoding
         self.sep=sep
+        self.decimal=decimal
         self.index=index
+        self.header=header
 
     def to_csv(self):
         # self.file = object from class Currency_file
@@ -105,71 +116,93 @@ class File_csv_exporter():
     def median_calc(self,*args):
         for column in args:
             result_median=self.file.ccy_file[column].median()
-            yield (column_name,result_median)
+            yield (column,result_median)
 
 
 
 
-fx_usdpln_2025=Currency_file(r"c:/Users/Admin/Desktop/Python/repository_dg/100-days-of-code-in-python/src/day_022/archiwum_tab_a_2025.csv","ISO-8859-2",";")
 
-print(fx_usdpln_2025.show_columns())  # 'data', '1USD , it alows to show what columns are in the file
-
-
-fx_usdpln_2025.adjust_by_specific_columns('data','1USD','1EUR').remove_rows(0)
+def main():
 
 
-fx_usdpln_2025.remove_rows(177,178,179).rename_columns(**{"data" : "Date"},**{"1USD":"FX_USD/PLN"},**{'1EUR':"FX_EUR/PLN"})
+    fx_usdpln_2025=Currency_file(r"c:/Users/Admin/Desktop/Python/repository_dg/100-days-of-code-in-python/src/day_022/NBP_transformer_input/archiwum_tab_a_2025.csv","ISO-8859-2",";")
 
-print(f'New colum names are: {fx_usdpln_2025.show_columns()}')
-
-fx_usdpln_2025.convert_to_number("FX_USD/PLN","FX_EUR/PLN").convert_to_date('Date')
+    print(fx_usdpln_2025.show_columns())  # 'data', '1USD , it alows to show what columns are in the file
 
 
+    fx_usdpln_2025.adjust_by_specific_columns('data','1USD','1EUR','1CHF').remove_rows(0)
 
-print(fx_usdpln_2025)
 
+    fx_usdpln_2025.remove_rows(177,178,179).rename_columns(**{"data" : "Date"},**{"1USD":"FX_USD/PLN"},**{'1EUR':"FX_EUR/PLN"},**{'1CHF':"FX_CHF/PLN"})
 
-new_clean_file = File_csv_exporter(
-    fx_usdpln_2025, 
-    r"c:/Users/Admin/Desktop/Python/repository_dg/100-days-of-code-in-python/src/day_022/USD_PLN_clean_current2025.csv",
-    encoding="ISO-8859-2",
-    sep=";"
-)
+    print(f'New colum names are: {fx_usdpln_2025.show_columns()}')
 
-# saving new csv file
-new_clean_file.to_csv()
-
-#print(f'kloumny to {new_clean_file.show_columns()}')
+    fx_usdpln_2025.convert_to_number("FX_USD/PLN","FX_EUR/PLN","FX_CHF/PLN").convert_to_date('Date')
 
 
 
-
-for column_name, mean_number in new_clean_file.mean_calc('FX_USD/PLN',"FX_EUR/PLN"): #expanding yield with column result, so that later the provided parameter can be printed
-
-    print(f'Mean number for {column_name} is {mean_number}')
+    print(fx_usdpln_2025)
 
 
+    new_clean_file = File_csv_exporter(
+        fx_usdpln_2025, 
+        r"c:/Users/Admin/Desktop/Python/repository_dg/100-days-of-code-in-python/src/day_022/NBP_transformer_output/USD_EUR_CHF_clean_current2025.csv",
+        encoding="ISO-8859-2",
+        sep=";"
+    )
 
-for column_name,median_number in new_clean_file.median_calc('FX_USD/PLN',"FX_EUR/PLN"):
-        print(f'Mean number for {column_name} is {median_number}')
+    # saving new csv file
+    new_clean_file.to_csv()
+
+    #print(f'kloumny to {new_clean_file.show_columns()}')
 
 
-correlation=new_clean_file.file.ccy_file['FX_USD/PLN'].corr(new_clean_file.file.ccy_file["FX_EUR/PLN"])
-print(f'korrelacja to : {correlation}')
 
+
+    for column_name, mean_number in new_clean_file.mean_calc('FX_USD/PLN',"FX_EUR/PLN","FX_CHF/PLN"): #expanding yield with column result, so that later the provided parameter can be printed
+
+        print(f'Mean number for {column_name} is {mean_number}')
+
+
+
+    for column_name,median_number in new_clean_file.median_calc('FX_USD/PLN',"FX_EUR/PLN","FX_CHF/PLN"):
+            print(f'Mean number for {column_name} is {median_number}')
+
+
+    correlation=new_clean_file.file.ccy_file['FX_USD/PLN'].corr(new_clean_file.file.ccy_file["FX_EUR/PLN"])
+    print(f'Correlation is : {correlation}')
+
+
+    covariance=new_clean_file.file.ccy_file['FX_USD/PLN'].cov(new_clean_file.file.ccy_file["FX_EUR/PLN"])
+    print(f'Covariance is : {covariance}')
+
+
+    columns_cov=["FX_USD/PLN","FX_EUR/PLN","FX_CHF/PLN"]
+    cov_matrix=new_clean_file.file.ccy_file[columns_cov].cov()
+
+    print(f'Cov matrix is :\n {cov_matrix}')
+    
+   
+
+    plt.figure(figsize=(10,7)) # chart size
+    plt.plot(fx_usdpln_2025.ccy_file.index,fx_usdpln_2025.ccy_file['FX_USD/PLN'],label='USD/PLN',color='blue',marker='.')
+    plt.title('FX for USD/PLN rate ')
+    plt.xlabel('Date')
+    plt.ylabel('FX rate')
+    mplcursors.cursor(hover=True)#when you hover over a point on the chart, it will show date and fx 
+    plt.grid(color="gray", linestyle="--", linewidth=0.5) #turn on the grid
+
+    plt.show()
+
+
+
+if __name__=="__main__":
+    main()
 # >>>>>>>>>>>>>>>>>>>>>>>
 
 
 
 
 
-# plt.figure(figsize=(10,7)) # chart size
-# plt.plot(fx_usdpln_2025.index,fx_usdpln_2025['FX_USD/PLN'],label='USD/PLN',color='blue',marker='.')
-# plt.title('FX for USD/PLN rate ')
-# plt.xlabel('Date')
-# plt.ylabel('FX rate')
-# mplcursors.cursor(hover=True)#when you hover over a point on the chart, it will show date and fx 
-# plt.grid(color="gray", linestyle="--", linewidth=0.5) #turn on the grid
 
-# plt.show()
                       
