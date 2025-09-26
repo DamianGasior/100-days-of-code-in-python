@@ -63,17 +63,17 @@ class Yahoo_data():
 
 
     def show_columns (self):
-       return self.yahoo_file.columns.tolist() #returning class instance of  class Currency_file()
+        return self.yahoo_file.columns.tolist() #returning class instance of  class Currency_file()
 
     def show_head (self,param):
-       return self.yahoo_file.head(param) #returning class instance of  class Currency_file()
+        return self.yahoo_file.head(param) #returning class instance of  class Currency_file()
 
 
 def main():
 
     common={'folder_path':r'c:/Users/Admin/Desktop/Python/repository_dg/100-days-of-code-in-python/src/day_022/',
         'raw_file_name' :'y__finance_data',
-            'set_columns': ['close_dxy','High','Low','Open','Volume'],
+            'set_columns': ['close_dxy','High','Low','Open','Volume'], #<<<<< this needs to be adjusted and moved from common to a differnet one , or take the 'close'_key
             'remove_columns':['High','Low','Open','Volume'],
             'start':"2018-01-01",
             'end':'2025-09-12'}
@@ -90,16 +90,17 @@ def main():
     print(type(underlyings))
 
 
-    for underlying in list_of_underlyings:
-        symbol=underlyings[underlying]
+    for stock in list_of_underlyings:
+        symbol=underlyings[stock]
         # print(f'symbol to {symbol}')
         underlying=Yahoo_data(folder_path=common['folder_path'],
                     raw_file_name=common['raw_file_name'],             #'y_data',
-                    output_file_name= f'{underlying}.csv')
+                    output_file_name= f'{stock}.csv')
                
         underlying.yf_download(symbol, common['start'], common['end'])
-        underlying.set_columns(common['set_columns'] )
+        underlying.set_columns([f'close_{stock}','High','Low','Open','Volume'] )
         underlying.remove_columns(common['remove_columns'])
+        # underlying.rename(columns=[f'close_{underlying}'])
         # print(dxy.show_head(8))
         underlying.file_convert_csv()
         print(underlying.show_head(8))
