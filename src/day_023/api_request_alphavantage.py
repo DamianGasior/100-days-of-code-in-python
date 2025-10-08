@@ -1,12 +1,17 @@
 import requests
+import time
 import pandas as pd
 from datetime import date
 from pathlib import Path
 import json
 import requests_cache
+import logging
 # requests_cache.clear() 
 import sqlite3
 import pickle
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 
@@ -37,7 +42,7 @@ class Underlying_request_details():
 
     def cache_manager(self):
         
-        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=10000, allowable_methods=('GET', 'POST'), serializer='pickle')
+        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=5, allowable_methods=('GET', 'POST'), serializer='pickle')
         
       
     def to_dict_params(self):
@@ -47,12 +52,29 @@ class Underlying_request_details():
         self.cache_manager()
         params=self.to_dict_params()
         url='https://www.alphavantage.co/query'
-        resp = requests.get(url, params=params)
-        print(resp.url)
+        try:
+            resp = requests.get(url, params=params)
+            resp.raise_for_status()
+            logging.info(f'Response is from: {resp}')
+
+        except requests.exceptions.Timeout:
+            print('Error: Server did not respond.Try again later.')
+            return None
+
+        except requests.exceptions.HTTPError as e:
+            print(f'Http error: {e}')
+            return None
+        
+        except requests.exceptions.RequestException as e:
+            print(f'Another error type: {e}')
+            return None
+           
+            
+
         if resp.status_code==200 and (getattr(resp,'from_cache',False)) is False :                                 
-            print("response was succesfull (200)")
+            logging.info("response was succesfull (200)")
         elif getattr(resp,'from_cache',False) is True:
-            print('Reqsponse is from cache. ')
+            logging.info('Response is from cache.')
         else:
             print(f"Response failed : {resp.status_code}")
         response=resp.json()
