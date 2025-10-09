@@ -9,30 +9,35 @@ import logging
 # requests_cache.clear() 
 import sqlite3
 import pickle
+import os
+from dotenv  import load_dotenv # module which allows to read .env file
+
+
+
+
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+BASE_DIR=Path(__file__).parent
+load_dotenv(BASE_DIR/'.env')  # loads are variables from .env file and caches those 
+API_KEY=os.getenv('apikey_alpha_vantage') # use the variable loaded from the line above
 
 
 class Underlying_request_details():
-    
-    BASE_DIR=Path(__file__).parent
-    # cache_path =BASE_DIR/'alpha_cache'/'alpha_cache'
     cache_path =BASE_DIR/'alpha_cache'
     cache_path .parent.mkdir(parents=True, exist_ok=True)
 
  
 
 
-    def __init__(self,symbol, function, outputsize,datatype,apikey='POS5M1VCF1GC1VM3'):
+    def __init__(self,symbol, function, outputsize,datatype,apikey=API_KEY):
         self.apikey=apikey
         self.symbol=symbol
         self.function = function
         self.outputsize=outputsize  
         self.datatype=datatype
-        # self.cache_path=self.__class__.cache_path # using  class atrribute 
         self.cache_path=Path(self.__class__.cache_path)/f'{symbol}' # using  class atrribute 
         self.db_file=Path(self.cache_path).with_suffix('.sqlite')
 
@@ -42,7 +47,7 @@ class Underlying_request_details():
 
     def cache_manager(self):
         
-        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=5, allowable_methods=('GET', 'POST'), serializer='pickle')
+        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=0, allowable_methods=('GET', 'POST'), serializer='pickle')
         
       
     def to_dict_params(self):
@@ -55,7 +60,7 @@ class Underlying_request_details():
         try:
             resp = requests.get(url, params=params)
             resp.raise_for_status()
-            logging.info(f'Response is from: {resp}')
+            logging.info(f'Response type is : {resp}')
 
         except requests.exceptions.Timeout:
             print('Error: Server did not respond.Try again later.')
@@ -70,14 +75,20 @@ class Underlying_request_details():
             return None
            
             
-
-        if resp.status_code==200 and (getattr(resp,'from_cache',False)) is False :                                 
+        if resp.status_code==200  and 'Information' in resp.json():
+           timeout_message=resp.json()
+           print(f'Limit API was reached, see comment : {timeout_message},wait 60 seconds please')
+           time.sleep(60)
+           return self.request_to_ext_api()
+        elif resp.status_code==200 and (getattr(resp,'from_cache',False)) is False :                                 
             logging.info("response was succesfull (200)")
         elif getattr(resp,'from_cache',False) is True:
             logging.info('Response is from cache.')
         else:
             print(f"Response failed : {resp.status_code}")
+
         response=resp.json()
+
         # print(json.dumps(response,indent=4)) # to see what is the json format response 
         return response
     
@@ -162,69 +173,73 @@ class Underlying_data_frame():
 
 apple_stock=Underlying_request_details('AAPL',"TIME_SERIES_DAILY","compact" ,"json")
 
+
 test=apple_stock.request_to_ext_api()
-# print(test)
+    
+
+
+print(test)
 # Underlying_request_details.check_for_caches()
 # apple_stock.read_caches()
 
-apple_stock.read_all_keys_values_from_api()
+# apple_stock.read_all_keys_values_from_api()
 
-apple_stock_df=Underlying_data_frame(test,"Time Series (Daily)")
-print(apple_stock_df)
+# apple_stock_df=Underlying_data_frame(test,"Time Series (Daily)")
+# print(apple_stock_df)
 
-print(apple_stock_df.show_columns())
-
-
-apple_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
-print(apple_stock_df.show_columns())
-print(apple_stock_df)
-
-# apple_stock_df
+# print(apple_stock_df.show_columns())
 
 
+# apple_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
+# print(apple_stock_df.show_columns())
+# print(apple_stock_df)
 
-apple_stock=Underlying_request_details('AAPL',"TIME_SERIES_DAILY","compact" ,"json")
-
-test=apple_stock.request_to_ext_api()
-# print(test)
-# Underlying_request_details.check_for_caches()
-# Underlying_request_details.read_caches()
-
-apple_stock.read_all_keys_values_from_api()
-
-apple_stock_df=Underlying_data_frame(test,"Time Series (Daily)")
-print(apple_stock_df)
-
-print(apple_stock_df.show_columns())
+# # apple_stock_df
 
 
-apple_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
-print(apple_stock_df.show_columns())
-print(apple_stock_df)
 
-apple_stock.read_caches()
+# apple_stock=Underlying_request_details('AAPL',"TIME_SERIES_DAILY","compact" ,"json")
 
+# test=apple_stock.request_to_ext_api()
+# # print(test)
+# # Underlying_request_details.check_for_caches()
+# # Underlying_request_details.read_caches()
 
-xom_stock=Underlying_request_details('XOM',"TIME_SERIES_DAILY","compact" ,"json")
+# apple_stock.read_all_keys_values_from_api()
 
-xom_test=xom_stock.request_to_ext_api()
-# print(test)
-# Underlying_request_details.check_for_caches()
+# apple_stock_df=Underlying_data_frame(test,"Time Series (Daily)")
+# print(apple_stock_df)
 
-
-xom_stock.read_all_keys_values_from_api()
-
-# xom_stock_df=Underlying_data_frame(xom_test,"Time Series (Daily)")
-# print(xom_stock_df)
-
-# print(xom_stock_df.show_columns())
+# print(apple_stock_df.show_columns())
 
 
-# xom_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
-# print(xom_stock_df.show_columns())
-# print(xom_stock_df)
+# apple_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
+# print(apple_stock_df.show_columns())
+# print(apple_stock_df)
 
-# print('CACHEEEEEEEEEEEEES')
+# apple_stock.read_caches()
+
+
+# xom_stock=Underlying_request_details('XOM',"TIME_SERIES_DAILY","compact" ,"json")
+
+# xom_test=xom_stock.request_to_ext_api()
+# # print(test)
+# # Underlying_request_details.check_for_caches()
+
+
+# xom_stock.read_all_keys_values_from_api()
+
+# # xom_stock_df=Underlying_data_frame(xom_test,"Time Series (Daily)")
+# # print(xom_stock_df)
+
+# # print(xom_stock_df.show_columns())
+
+
+# # xom_stock_df.column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
+# # print(xom_stock_df.show_columns())
+# # print(xom_stock_df)
+
+# # print('CACHEEEEEEEEEEEEES')
 
 
 
