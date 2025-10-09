@@ -47,13 +47,13 @@ class Underlying_request_details():
 
     def cache_manager(self):
         
-        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=0, allowable_methods=('GET', 'POST'), serializer='pickle')
+        requests_cache.install_cache(self.cache_path, backend='sqlite', expire_after=100000, allowable_methods=('GET', 'POST'), serializer='pickle')
         
       
     def to_dict_params(self):
         return self.__dict__
 
-    def request_to_ext_api(self):
+    def request_to_ext_api(self) :
         self.cache_manager()
         params=self.to_dict_params()
         url='https://www.alphavantage.co/query'
@@ -178,7 +178,7 @@ test=apple_stock.request_to_ext_api()
     
 
 
-print(test)
+#print(test)
 # Underlying_request_details.check_for_caches()
 # apple_stock.read_caches()
 
