@@ -1,4 +1,6 @@
-from api_request_alphavantage import Underlying_request_details,Underlying_data_frame
+from api_request_alphavantage import Underlying_request_details
+from stock_data_frame import Underlying_data_frame
+from metrics_calcs import Underlying_metrics
 
 
 class UnderlyingBuilder:
@@ -25,16 +27,17 @@ class UnderlyingBuilder:
         print(data_frame_builder)
         print(data_frame_builder.show_columns())
         # print(data_frame_builder.filter(items=['Date','close']))
-        print(data_frame_builder.price_chng_perct())
+        data_frame_builder_with_calcs=Underlying_metrics(underlying_reuqestor,data_frame_builder)
+        print(data_frame_builder_with_calcs.price_chng_perct())
         # print(data_frame_builder.show_columns())
 
 
-        result_worst_and_best=data_frame_builder.worst_and_best()
-        print(result_worst_and_best)
+        # result_worst_and_best=data_frame_builder.worst_and_best()
+        # print(result_worst_and_best)
 
-        stand_deviation_metrics=data_frame_builder.std_dev()
-        print(stand_deviation_metrics)
-        # print(data_frame_builder.show_columns())
+        # stand_deviation_metrics=data_frame_builder.std_dev()
+        # print(stand_deviation_metrics)
+
 
 
 
@@ -44,7 +47,7 @@ def main():
     function="TIME_SERIES_DAILY"
     outputsize="compact"
     datatype="json"
-    symbol='MSFT'
+    symbol='SPY'
     # return_column_name='close'
 
 
