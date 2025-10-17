@@ -14,6 +14,7 @@ class Underlying_data_frame:
         self.response_from_alpha = response_from_alpha
         self.transform(key_paremeter).set_date_as_index().column_rename(**{'1. open': 'open'},**{'2. high': 'high'},**{'3. low': 'low'},**{'4. close': 'close'},**{'5. volume': 'volume'})
         self.leave_only_columns('close')  # in the future an option to the user can be enabled to choose from following columns ('open','high', 'low', 'close', 'volume')
+        self.add_new_columns() 
 
  
     def __getattr__(self,name): # dunder method, it allows to treat the class instance as dataframe
@@ -82,6 +83,10 @@ class Underlying_data_frame:
     def column_rename(self, **kwargs):
         # columns #thnink if it should be alist or a dict or waht ?
         self.response_from_alpha.rename(columns=kwargs, inplace=True)
+        return self
+    
+    def add_new_columns(self):
+        self.response_from_alpha.insert(0,'symbol',self.stock_symbol)
         return self
     
 

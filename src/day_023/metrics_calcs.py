@@ -1,13 +1,7 @@
-import requests
-import time
+
 import pandas as pd
 from datetime import date
 from pathlib import Path
-import requests_cache
-import logging
-import sqlite3
-import pickle
-import os
 from dotenv import load_dotenv  # module which allows to read .env file
 
 from api_request_alphavantage import Underlying_request_details
@@ -83,4 +77,6 @@ class Underlying_metrics:
         return result_st_dev
 
     #add average price, high and low for a sepcifc period, and the price for start date and end date. 
+
+    # think somehting about Volume, and what does it mean ...
     

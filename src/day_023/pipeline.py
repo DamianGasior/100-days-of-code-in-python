@@ -48,23 +48,33 @@ class UnderlyingBuilder:
 
 def main():
     
-    set_of_requests=deque()
+    queue_of_requests=deque()
 
+    symbol_list=['SPY','MSFT']
+  
 
+    while symbol_list:
+        for code in symbol_list:
+            if len(symbol_list) >= 1:
+                underlying_reuqestor=Underlying_request_details(
+                symbol= symbol_list.pop(0),
+                function="TIME_SERIES_DAILY",
+                outputsize="compact",
+                datatype="json")
+            else:
+                raise ValueError('Missing Underlyin code')
 
-
-    function="TIME_SERIES_DAILY"
-    outputsize="compact"
-    datatype="json"
-    symbol='SPY'
+        queue_of_requests.append(underlying_reuqestor)
+        print(len(queue_of_requests))
     
-    # return_column_name='close'
 
+    while queue_of_requests:
 
-    underlying_reuqestor=Underlying_request_details(symbol=symbol,function=function,outputsize=outputsize,datatype=datatype)
-    pipeline=UnderlyingBuilder(underlying_reuqestor).run_pipeline(underlying_reuqestor)
+        underlying_reuqestor=queue_of_requests.popleft()
+
+        pipeline=UnderlyingBuilder(underlying_reuqestor).run_pipeline(underlying_reuqestor)
+
     
-      
 
 if __name__=="__main__":
     main()

@@ -46,7 +46,7 @@ class Underlying_request_details:
         requests_cache.install_cache(
             self.cache_path,
             backend="sqlite",
-            expire_after=5,
+            expire_after=10000,
             allowable_methods=("GET", "POST"),
             serializer="pickle",
         )
